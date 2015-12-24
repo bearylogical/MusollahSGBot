@@ -1,0 +1,10 @@
+node_modules/
+private/
+broadcast_logs/
+
+
+*.swp
+
+*.db
+
+test*
