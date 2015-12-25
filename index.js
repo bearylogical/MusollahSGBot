@@ -2,7 +2,7 @@ var TelegramBot = require('node-telegram-bot-api');
 var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 
-var locator = require('./public/api/locator')
+var locator = require('./public/api/locator');
 
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
