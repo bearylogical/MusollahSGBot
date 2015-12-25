@@ -86,7 +86,7 @@ function musollahlocator(callback,musollahName,location){
     for (var i = 0; i < nus.length; i++) { //check for musollah
         if (musollah.toLowerCase() === nus[i].name.toLowerCase()) {
             name = nus[i].name;
-            directions = nus[i].directions;
+            directions = nus[i].directions.join('\n');
             toiletLocation = nus[i].toiletLocation;
         }
     }
