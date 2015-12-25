@@ -1,18 +1,20 @@
-[{
-		"name" : "UTown",
-		"region" : "UTOWN", 
-		"latitude" : 1.305822 ,
-		"longititude" :	103.773067,
-		"directions" : "Proceed to Level 2, Head to Staircase 3 Landing near the toilets",
-		"toiletLocation" : "Toilets are on Level 2, on the left side after coming out of the staircase",
-		"gender" : "Male / Female"
-	},{
-		"name" : "EA Male Musollah",
-		"region" : "Engineering", 
-		"latitude" : 1.300493 ,
-		"longititude" :	103.770544,
-		"directions" : "Level 7, The staircase lending to the right of the lift near Dean's office ",
-		"toiletLocation" : "Level 7 Toilets on the left of the lifts",
-		"gender" : "Male"
-	}
+[
+    {
+        "name": "UTown",
+        "region": "UTOWN",
+        "latitude": 1.305822,
+        "longitude": 103.773067,
+        "directions": "Proceed to Level 2, Head to Staircase 3 Landing near the toilets",
+        "toiletLocation": "Level 2, on the left side after coming out of the staircase",
+        "gender": "Male / Female"
+    },
+    {
+        "name": "EA Male Musollah",
+        "region": "Engineering",
+        "latitude": 1.300493,
+        "longitude": 103.770544,
+        "directions": "Level 7, The staircase landing to the right of the lift near Dean's office ",
+        "toiletLocation": "On the left side of the lifts",
+        "gender": "Male"
+    }
 ]

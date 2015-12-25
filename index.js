@@ -3,6 +3,7 @@ var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 var util = require('./public/api/util');
 
+var prayer = require('./public/prayer times/prayer.json');
 var musollah = require('./public/api/musollah');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
@@ -24,6 +25,10 @@ bot.on('message', function(msg) {
         if (!msg.hasOwnProperty('text') && !msg.hasOwnProperty('location')) {
             return false;
         }
+        if (msg.hasOwnProperty('location')) {
+            return processLocation(msg);
+        }
+
 
         var chatId = msg.chat.id;
         var body = msg.text;
@@ -38,14 +43,13 @@ bot.on('message', function(msg) {
             case "start":
                 return help(chatId);
             case "musollah":
-                return (musollahSessions[chatId] = musollah.musollahAsk(chatId,bot));
+                return (musollahSessions[chatId] = musollah.musollahAsk(chatId, bot));
         }
         switch (body.toLowerCase()) {
-            default: 
-            var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+            default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
             console.log(musollahSession.onGoing);
             if (musollahSession.onGoing) {
-                return musollah.musollahQuery(chatId, body.toLowerCase(),bot);
+                return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
         }
         return default_msg(chatId);
@@ -55,6 +59,13 @@ bot.on('message', function(msg) {
     }
 });
 
+function processLocation(msg) {
+    var chatId = msg.chat.id;
+    var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+    if (musollahSession.onGoing) {
+        musollah.musollahQuery(chatId, msg.text, msg.location, bot);
+    }
+}
 
 
 function default_msg(chatId) {
