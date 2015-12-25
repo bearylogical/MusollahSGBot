@@ -42,6 +42,8 @@ bot.on('message', function(msg) {
         switch (command.toLowerCase()) {
             case "start":
                 return help(chatId);
+            case "help":
+                return help(chatId);
             case "musollah":
                 return (musollahSessions[chatId] = musollah.musollahAsk(chatId, bot));
         }
@@ -67,6 +69,13 @@ function processLocation(msg) {
     }
 }
 
+function help(chatId) {
+    var helpMessage =
+    "Salaam and welcome to MusollahBot\n" +
+    "Here's what you can ask!\n\n" +
+    "/musollah - provide directions to musollahs";
+    bot.sendMessage(chatId,helpMessage);
+}
 
 function default_msg(chatId) {
     bot.sendMessage(chatId, "Sorry, I don't understand you! Try another command instead", {
