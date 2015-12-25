@@ -3,7 +3,8 @@ var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 var util = require('./public/api/util');
 
-
+var musollah = require('./public/api/musollah');
+var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
 });
@@ -14,6 +15,8 @@ console.log(chalk.blue("     MusollahBot Started    "));
 console.log(chalk.blue("                            "));
 console.log(chalk.blue("============================"));
 console.log(chalk.blue("                            "));
+
+var musollahSessions = {};
 
 bot.on('message', function(msg) {
     try {
@@ -35,16 +38,16 @@ bot.on('message', function(msg) {
             case "start":
                 return help(chatId);
             case "musollah":
-                return musollahAsk(chatId);
+                return (musollahSessions[chatId] = musollah.musollahAsk(chatId,bot));
         }
-         switch (body.toLowerCase()) {
-            default:
-                var musollahSession = musollahSessions[chatId] || new MusollahSession(chatId);
-                if (musollahSession.onGoing) {
-                    return musollahQuery(chatId, body);
-                }
-        }	
-
+        switch (body.toLowerCase()) {
+            default: 
+            var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+            console.log(musollahSession.onGoing);
+            if (musollahSession.onGoing) {
+                return musollah.musollahQuery(chatId, body.toLowerCase(),bot);
+            }
+        }
         return default_msg(chatId);
     } catch (e) {
         bot.sendMessage(msg.chat.id, "MusollahBot has encountered an Error, please try again later");
@@ -52,11 +55,6 @@ bot.on('message', function(msg) {
     }
 });
 
-function MusollahSession(chatId) {
-    this.chatId = chatId;
-    this.onGoing = false;
-    musollahSessions[chatId] = this;
-}
 
 
 function default_msg(chatId) {
@@ -65,22 +63,4 @@ function default_msg(chatId) {
             hide_keyboard: true
         })
     });
-}
-
-function musollahAsk(chatId) {
-    var opts = {
-        reply_markup: JSON.stringify({
-            keyboard: [
-                ['Nearest Musollah'],
-                ['UTown']
-            ],
-            one_time_keyboard: true
-        })
-    };
-    var greeting = "Good" + util.currentTimeGreeting();
-    bot.sendMessage(chatId, greeting + " Where would you like prayer locations for?", opts);
-}
-
-function musollahQuery(chatId,musollahName) {
-	
 }
