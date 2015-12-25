@@ -56,6 +56,7 @@ function musollahQuery(chatId, musollahName,location,bot) {
             })
         });
         musollahSessions[chatId] = new MusollahSession(chatId);
+        console.log(musollahSessions.onGoing);
 
     }
     

@@ -3,7 +3,6 @@ var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 var util = require('./public/api/util');
 
-
 var musollah = require('./public/api/musollah');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
@@ -49,7 +48,6 @@ bot.on('message', function(msg) {
         }
         switch (body.toLowerCase()) {
             default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
-            console.log(musollahSession.onGoing);
             if (musollahSession.onGoing) {
                 return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
@@ -66,15 +64,17 @@ function processLocation(msg) {
     var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
     if (musollahSession.onGoing) {
         musollah.musollahQuery(chatId, msg.text, msg.location, bot);
-    }
+    } else{
+        return default_msg(chatId);
+    } 
 }
 
 function help(chatId) {
     var helpMessage =
-    "Salaam and welcome to MusollahBot\n" +
-    "Here's what you can ask!\n\n" +
-    "/musollah - provide directions to musollahs";
-    bot.sendMessage(chatId,helpMessage);
+        "Salaam and welcome to MusollahBot\n" +
+        "Here's what you can ask!\n\n" +
+        "/musollah - provide directions to musollahs";
+    bot.sendMessage(chatId, helpMessage);
 }
 
 function default_msg(chatId) {
