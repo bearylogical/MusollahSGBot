@@ -4,7 +4,7 @@
         "region": "UTOWN",
         "latitude": 1.305822,
         "longitude": 103.773067,
-        "directions": "Proceed to Level 2, Head to Staircase 3 Landing near the toilets",
+        "directions": ["Proceed to Level 2, Head to Staircase 3 Landing near the toilets"],
         "toiletLocation": "Level 2, on the left side after coming out of the staircase",
         "gender": "Male / Female"
     },
@@ -13,8 +13,11 @@
         "region": "Engineering",
         "latitude": 1.300493,
         "longitude": 103.770544,
-        "directions": "Level 7, The staircase landing to the right of the lift near Dean's office ",
-        "toiletLocation": "On the left side of the lifts",
+        "directions": [ "Find the lift nearest to Engineering Auditorium", 
+        			"opposite Good News Café and take the lift to the 7th storey.",
+        			"Next, turn left towards the fire exit and climb the flight of stairs",
+        			"to reach the musollah."],
+        "toiletLocation" : "On the left side of the lifts",
         "gender": "Male"
     }
 ]
