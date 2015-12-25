@@ -3,7 +3,7 @@ var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 var util = require('./public/api/util');
 
-var prayer = require('./public/prayer times/prayer.json');
+
 var musollah = require('./public/api/musollah');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
