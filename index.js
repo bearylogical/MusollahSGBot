@@ -1,8 +1,8 @@
 var TelegramBot = require('node-telegram-bot-api');
 var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
+var util = require('./public/api/util');
 
-var locator = require('./public/api/locator');
 
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
@@ -21,9 +21,7 @@ bot.on('message', function(msg) {
         if (!msg.hasOwnProperty('text') && !msg.hasOwnProperty('location')) {
             return false;
         }
-        if (msg.hasOwnProperty('location')) {
-            return locator.processLocation(msg);
-        }
+
         var chatId = msg.chat.id;
         var body = msg.text;
         var command = body;
@@ -37,21 +35,29 @@ bot.on('message', function(msg) {
             case "start":
                 return help(chatId);
             case "musollah":
-                return locator.musollahLocator(chatId);
+                return musollahAsk(chatId);
         }
-        switch (body.toLowerCase()) {
+         switch (body.toLowerCase()) {
             default:
-                var musollahSession = musollahSessions[chatId] || new musollahSession(chatId);
+                var musollahSession = musollahSessions[chatId] || new MusollahSession(chatId);
                 if (musollahSession.onGoing) {
-                    return locator.musollahLocator(chatId, body.toLowerCase(), msg.location);
+                    return musollahQuery(chatId, body);
                 }
-        }
+        }	
+
         return default_msg(chatId);
     } catch (e) {
         bot.sendMessage(msg.chat.id, "MusollahBot has encountered an Error, please try again later");
         bot.sendMessage('49892469', e.toString());
     }
 });
+
+function MusollahSession(chatId) {
+    this.chatId = chatId;
+    this.onGoing = false;
+    musollahSessions[chatId] = this;
+}
+
 
 function default_msg(chatId) {
     bot.sendMessage(chatId, "Sorry, I don't understand you! Try another command instead", {
@@ -61,3 +67,20 @@ function default_msg(chatId) {
     });
 }
 
+function musollahAsk(chatId) {
+    var opts = {
+        reply_markup: JSON.stringify({
+            keyboard: [
+                ['Nearest Musollah'],
+                ['UTown']
+            ],
+            one_time_keyboard: true
+        })
+    };
+    var greeting = "Good" + util.currentTimeGreeting();
+    bot.sendMessage(chatId, greeting + " Where would you like prayer locations for?", opts);
+}
+
+function musollahQuery(chatId,musollahName) {
+	
+}
