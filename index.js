@@ -1,10 +1,15 @@
 var TelegramBot = require('node-telegram-bot-api');
 var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
+<<<<<<< HEAD
 var request = require('request');
 var cheerio = require('cheerio');
 var locator = require('./public/api/locator');
 var prayertimes2015 = require('./public/prayertimes/2015.json');
+=======
+
+var locator = require('./public/api/locator');
+>>>>>>> refs/remotes/bearylogical/master
 
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
