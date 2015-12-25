@@ -8,3 +8,5 @@ broadcast_logs/
 *.db
 
 test*
+public/api/locator.js
+public/api/locator.js

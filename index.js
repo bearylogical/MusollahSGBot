@@ -1,8 +1,10 @@
 var TelegramBot = require('node-telegram-bot-api');
 var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
-
+var request = require('request');
+var cheerio = require('cheerio');
 var locator = require('./public/api/locator');
+var prayertimes2015 = require('./public/prayertimes/2015.json');
 
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
@@ -21,13 +23,13 @@ bot.on('message', function(msg) {
         if (!msg.hasOwnProperty('text') && !msg.hasOwnProperty('location')) {
             return false;
         }
-        if (msg.hasOwnProperty('location')) {
-            return locator.processLocation(msg);
-        }
+        // if (msg.hasOwnProperty('location')) {
+        //     return locator.processLocation(msg);
+        // }
         var chatId = msg.chat.id;
         var body = msg.text;
         var command = body;
-        var args = body;    
+        var args = body;
         if (body.charAt(0) === '/') {
             command = body.split(' ')[0].substr(1);
             args = body.split(' ')[1];
@@ -37,7 +39,9 @@ bot.on('message', function(msg) {
             case "start":
                 return help(chatId);
             case "musollah":
-                return locator.musollahLocator(chatId);
+                return bot.sendMessage(chatId, "Searching Musollah"); //locator.musollahLocator(chatId);
+            case "prayer times":
+                return prayertime(chatId);
         }
         /*switch (body.toLowerCase()) {
             default:
@@ -61,3 +65,32 @@ function default_msg(chatId) {
     });
 }
 
+function prayertime(chatId) {
+
+    var today = new Date().toString().substr(0, 16);
+    var message = String();
+    message = "Prayer Times For" + '\n';
+
+    var date = new Date();
+    if (date.getFullYear() == 2015) {
+
+        var targetDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
+        for (var i = 0; i < prayertimes2015.events.length; i++) {
+            if (targetDate == prayertimes2015.events[i].Date) {
+                message = message + prayertimes2015.events[i].Hijri + " / " + today + '\n';
+                message = message + "Subuh " + prayertimes2015.events[i].Subuh.replace(" ", ":") + "am" + '\t';
+                message = message + "Syuruk " + prayertimes2015.events[i].Syuruk.replace(" ", ":") + "am" + '\n';
+                message = message + "Zohor " + prayertimes2015.events[i].Zohor.replace(" ", ":") + "pm" + '\t';
+                message = message + "Asar " + prayertimes2015.events[i].Asar.replace(" ", ":") + "pm" + '\n';
+                message = message + "Maghrib " + prayertimes2015.events[i].Maghrib.replace(" ", ":") + "pm" + '\t';
+                message = message + "Isyak " + prayertimes2015.events[i].Isyak.replace(" ", ":") + "pm" + '\n';
+                bot.sendMessage(chatId, message);
+            }
+
+        }
+
+    } else {
+        bot.sendMessage("Prayer Times unavailable");
+    }
+}
