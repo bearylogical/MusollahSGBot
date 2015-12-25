@@ -2,7 +2,7 @@ var TelegramBot = require('node-telegram-bot-api');
 var CREDENTIALS = require('./private/telegram_credentials.json');
 var chalk = require('chalk');
 
-var locator = require('./public/api/locator')
+var locator = require('./public/api/locator');
 
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
@@ -27,7 +27,7 @@ bot.on('message', function(msg) {
         var chatId = msg.chat.id;
         var body = msg.text;
         var command = body;
-        var args = body;
+        var args = body;    
         if (body.charAt(0) === '/') {
             command = body.split(' ')[0].substr(1);
             args = body.split(' ')[1];
@@ -39,17 +39,17 @@ bot.on('message', function(msg) {
             case "musollah":
                 return locator.musollahLocator(chatId);
         }
-        switch (body.toLowerCase()) {
+        /*switch (body.toLowerCase()) {
             default:
                 var musollahSession = musollahSessions[chatId] || new musollahSession(chatId);
                 if (musollahSession.onGoing) {
                     return locator.musollahLocator(chatId, body.toLowerCase(), msg.location);
                 }
-        }
+        }*/
         return default_msg(chatId);
     } catch (e) {
         bot.sendMessage(msg.chat.id, "MusollahBot has encountered an Error, please try again later");
-        bot.sendMessage('49892469', e.toString());
+        bot.sendMessage('139006926', e.toString());
     }
 });
 
