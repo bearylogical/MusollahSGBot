@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var util = require('./public/api/util');
 
 var musollah = require('./public/api/musollah');
+var prayerTime = require('./public/api/prayertime');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
@@ -45,6 +46,8 @@ bot.on('message', function(msg) {
                 return help(chatId);
             case "musollah":
                 return (musollahSessions[chatId] = musollah.musollahAsk(chatId, bot));
+            case "prayer":
+                return (prayerTime.sendPrayerTime(chatId, bot));
         }
         switch (body.toLowerCase()) {
             default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
