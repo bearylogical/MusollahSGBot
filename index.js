@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var util = require('./public/api/util');
 
 var musollah = require('./public/api/musollah');
+var sgmusollah = require('./public/api/sgmusollah');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
     polling: true
@@ -17,6 +18,7 @@ console.log(chalk.blue("============================"));
 console.log(chalk.blue("                            "));
 
 var musollahSessions = {};
+var SGmusollahSessions = {};
 
 bot.on('message', function(msg) {
     try {
@@ -45,11 +47,18 @@ bot.on('message', function(msg) {
                 return help(chatId);
             case "musollah":
                 return (musollahSessions[chatId] = musollah.musollahAsk(chatId, bot));
+            case "sgmusollah":
+                return (SGmusollahSessions[chatId] = sgmusollah.musollahAsk(chatId, bot));
         }
         switch (body.toLowerCase()) {
-            default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+            default: 
+            var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
             if (musollahSession.onGoing) {
                 return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
+            }
+            var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.MusollahSession(chatId);
+            if (SGmusollahSession.onGoing) {
+                return sgmusollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
         }
         return default_msg(chatId);
@@ -64,7 +73,12 @@ function processLocation(msg) {
     var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
     if (musollahSession.onGoing) {
         musollah.musollahQuery(chatId, msg.text, msg.location, bot);
-    } else {
+    }
+    var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
+    if (SGmusollahSession.onGoing) {
+        sgmusollah.musollahQuery(chatId, msg.text, msg.location, bot);
+    } 
+    else {
         return default_msg(chatId);
     }
 }
