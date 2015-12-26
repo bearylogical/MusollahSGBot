@@ -64,9 +64,9 @@ function processLocation(msg) {
     var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
     if (musollahSession.onGoing) {
         musollah.musollahQuery(chatId, msg.text, msg.location, bot);
-    } else{
+    } else {
         return default_msg(chatId);
-    } 
+    }
 }
 
 function help(chatId) {
