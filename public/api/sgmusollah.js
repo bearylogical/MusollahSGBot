@@ -1,7 +1,6 @@
 var geolib = require('geolib');
-var nus = require('../locations/nusMusollah.json');
+var sgLoc = require('../locations/sgMusollah.json');
 var util = require('./util');
-var rest = require('reslet')
 
 var SGmusollahSession = {};
 
@@ -11,68 +10,62 @@ function SGMusollahSession(chatId) {
     SGmusollahSession[chatId] = this;
 }
 
-function musollahAsk(chatId,bot) {
+function SGmusollahAsk(chatId,bot) {
     
+    var locResponse = "Please send me your location to find nearest Musollah\n\n";
+    locResponse += "You can do this by selecting the paperclip icon (📎) ";
+    locResponse += "followed by attaching your location (📌).";
+
     var greeting = "Good " + util.currentTimeGreeting();
-    bot.sendMessage(chatId, greeting + ", Please send me your location ", opts);
+    bot.sendMessage(chatId, greeting + ", "+ locResponse);
     SGmusollahSession[chatId] = new SGMusollahSession(chatId);
     SGmusollahSession[chatId].onGoing = true;
     
-
-    function callback(err, data) {
-        if (err) {
-            return bot.sendMessage(chatId, err, {
-                parse_mode: "Markdown",
-                reply_markup: JSON.stringify({
-                    hide_keyboard: true
-                })
-            });
-        }
-        bot.sendMessage(chatId, data, {
-            parse_mode: "Markdown",
-            reply_markup: JSON.stringify({
-                hide_keyboard: true
-            })
-        });
-        SGmusollahSession[chatId] = new SGMusollahSession(chatId);
-        console.log(SGmusollahSession.onGoing);
-
-    }
-    
-    SGmusollahlocator(callback, location)
-
+    return SGmusollahSession[chatId];
 
 }
 
 
-function SGmusollahlocator(callback, location){
+function SGmusollahLocator(chatId,location,bot){
 
     var directions;
     var musollah;
 
     if(location) {
-        musollah = nearestMusollah(location);
+        musollah = nearestSGMusollah(location);
         
-    } 
+    }
 
     if (!musollah) {
-        return callback("Invalid Musollah!Please try again");
+        return ("Invalid Musollah!Please try again");
     }
 
 
-    for (var i = 0; i < nus.length; i++) { //check for musollah
-        if (musollah.toLowerCase() === nus[i].name.toLowerCase()) {
-            name = nus[i].name;
-            directions = nus[i].directions.join('\n');
-            toiletLocation = nus[i].toiletLocation;
+    for (var i = 0; i < sgLoc.length; i++) { //check for musollah
+        if (musollah.toLowerCase() === sgLoc[i].Place.toLowerCase()) {
+            name = sgLoc[i].Place;
+            address = sgLoc[i].Address;
+            directions = sgLoc[i].LocationIn;
+            locationDetails = sgLoc[i].Details;
+            lat = sgLoc[i].latitude;
+            longit = sgLoc[i].longitude;
         }
     }
 
-    response = "_"+ name + "_" + " is your Nearest Musollah\n\n";
+    response = "*"+ name + "*" +" at _" + address + "_ is your Nearest Musollah\n\n";
     response += "*Directions*: " + directions + "\n\n";
-    response += "*Toilet location*: " + toiletLocation ;
+    response += "*Additional Details*: " + locationDetails;
 
-    return callback(null,response);
+
+
+    bot.sendLocation(chatId,lat,longit).then(function() {
+        bot.sendMessage(chatId,response,{
+        parse_mode : "Markdown"
+    });
+    })
+
+    
+    
 
 }
 
@@ -80,24 +73,23 @@ function SGmusollahlocator(callback, location){
 function nearestSGMusollah(start) {
     var minDist = Infinity;
     var minMusollah = "Technopreneur Centre";
-    var reqURL = "https://api.musollah.com/info/musollah/list/sg?X-API-KEY=2GLqstVdfEp5k17R12C60I6B1y0TG167"
     
     
     
-    for (var i = 0; i < nus.length; i++) {
+    for (var i = 0; i < sgLoc.length; i++) {
 
-        var dist = geolib.getDistance(start, nus[i]);
+        var dist = geolib.getDistance(start, sgLoc[i]);
         if (dist < minDist) {
             minDist = dist;
-            minMusollah = nus[i].name;
+            minMusollah = sgLoc[i].Place;
         }
     }
     return minMusollah;
 }
 
 module.exports ={
-    musollahAsk : musollahAsk,
-    musollahQuery : musollahQuery,
+    SGmusollahAsk : SGmusollahAsk,
+    SGmusollahLocator : SGmusollahLocator,
     SGMusollahSession : SGMusollahSession
 }
 

@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var util = require('./public/api/util');
 
 var musollah = require('./public/api/musollah');
+var prayerTime = require('./public/api/prayertime');
 var sgmusollah = require('./public/api/sgmusollah');
 var nus = require('./public/locations/nusMusollah.json');
 var bot = new TelegramBot(CREDENTIALS.token, {
@@ -48,17 +49,18 @@ bot.on('message', function(msg) {
             case "musollah":
                 return (musollahSessions[chatId] = musollah.musollahAsk(chatId, bot));
             case "sgmusollah":
-                return (SGmusollahSessions[chatId] = sgmusollah.musollahAsk(chatId, bot));
+                return (SGmusollahSessions[chatId] = sgmusollah.SGmusollahAsk(chatId, bot));
+            case "prayer":
+                return (prayerTime.sendPrayerTime(chatId, bot));
         }
         switch (body.toLowerCase()) {
-            default: 
-            var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+            default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
             if (musollahSession.onGoing) {
                 return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
-            var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.MusollahSession(chatId);
+            var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGsoMusollahSession(chatId);
             if (SGmusollahSession.onGoing) {
-                return sgmusollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
+                return sgmusollah.SGmusollahLocator(chatId, msg.location, bot);
             }
         }
         return default_msg(chatId);
@@ -76,9 +78,8 @@ function processLocation(msg) {
     }
     var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
     if (SGmusollahSession.onGoing) {
-        sgmusollah.musollahQuery(chatId, msg.text, msg.location, bot);
-    } 
-    else {
+        sgmusollah.SGmusollahLocator(chatId, msg.location, bot);
+    } else {
         return default_msg(chatId);
     }
 }
