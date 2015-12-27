@@ -64,7 +64,7 @@ function SGmusollahLocator(chatId,location,bot){
     });
     })
 
-    
+    SGmusollahSessions[chatId] = new SGMusollahSession(chatId);
     
 
 }

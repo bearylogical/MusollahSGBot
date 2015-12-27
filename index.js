@@ -58,7 +58,7 @@ bot.on('message', function(msg) {
             if (musollahSession.onGoing) {
                 return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
-            var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGsoMusollahSession(chatId);
+            var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
             if (SGmusollahSession.onGoing) {
                 return sgmusollah.SGmusollahLocator(chatId, msg.location, bot);
             }
@@ -73,11 +73,11 @@ bot.on('message', function(msg) {
 function processLocation(msg) {
     var chatId = msg.chat.id;
     var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+    var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
     if (musollahSession.onGoing) {
         musollah.musollahQuery(chatId, msg.text, msg.location, bot);
     }
-    var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
-    if (SGmusollahSession.onGoing) {
+    else if (SGmusollahSession.onGoing) {
         sgmusollah.SGmusollahLocator(chatId, msg.location, bot);
     } else {
         return default_msg(chatId);
@@ -88,7 +88,9 @@ function help(chatId) {
     var helpMessage =
         "Salaam and welcome to MusollahBot\n" +
         "Here's what you can ask!\n\n" +
-        "/musollah - provide directions to musollahs";
+        "/musollah - provide directions to musollahs\n" +
+        "/prayer - provide prayer times\n" +
+        "/sgmusollah - provide directions to musollahs around SG";
     bot.sendMessage(chatId, helpMessage);
 }
 
