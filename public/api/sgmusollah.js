@@ -2,12 +2,12 @@ var geolib = require('geolib');
 var sgLoc = require('../locations/sgMusollah.json');
 var util = require('./util');
 
-var SGmusollahSession = {};
+var SGmusollahSessions = {};
 
 function SGMusollahSession(chatId) {
     this.chatId = chatId;
     this.onGoing = false;
-    SGmusollahSession[chatId] = this;
+    SGmusollahSessions[chatId] = this;
 }
 
 function SGmusollahAsk(chatId,bot) {
@@ -18,10 +18,10 @@ function SGmusollahAsk(chatId,bot) {
 
     var greeting = "Good " + util.currentTimeGreeting();
     bot.sendMessage(chatId, greeting + ", "+ locResponse);
-    SGmusollahSession[chatId] = new SGMusollahSession(chatId);
-    SGmusollahSession[chatId].onGoing = true;
+    SGmusollahSessions[chatId] = new SGMusollahSession(chatId);
+    SGmusollahSessions[chatId].onGoing = true;
     
-    return SGmusollahSession[chatId];
+    return SGmusollahSessions[chatId];
 
 }
 
