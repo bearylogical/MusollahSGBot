@@ -6,7 +6,7 @@
         "longitude": 103.773067,
         "directions": ["Proceed to Level 2, Head to Staircase 3 Landing near the toilets"],
         "toiletLocation": "Level 2, on the left side after coming out of the staircase",
-        "gender": "Male / Female"
+        "gender": "Mixed"
     },
     {
         "name": "EA Male Musollah",
@@ -19,5 +19,47 @@
         			"to reach the musollah."],
         "toiletLocation" : "On the left side of the lifts",
         "gender": "Male"
+    },
+    {
+        "name": "EA Female Musollah",
+        "region": "Engineering",
+        "latitude": 1.300543,
+        "longitude": 103.770870,
+        "directions": [ "Find the lift nearest to LT7A next to Good News Café and", 
+                    "take the lift to the 7th storey.",
+                    "Next, turn left towards the fire exit",
+                    "and climb the flight of stairs to reach the musollah "],
+        "toiletLocation" : "On the right side of the lifts",
+        "gender": "Male"
+    },
+    {
+        "name": "SDE 3 Female Musollah",
+        "region": "SDE",
+        "latitude": 1.298024,
+        "longitude": 103.770709,
+        "directions": [ "From the 2nd storey of the SDE building, take the lift to the 4th storey.", 
+                    "Exit the lift, walk straight and turn right. Walk past the lecture theatres, past the toilet signs and through the passage.",
+                    "Turn left towards the female toilet and",
+                    "enter the staircase door. Climb the stairs to reach the musollah"],
+        "toiletLocation" : "",
+        "gender": "Female"
+    },
+    {
+        "name": "SDE 3 Male Musollah",
+        "region": "SDE",
+        "latitude": 1.298024,
+        "longitude": 103.770709,
+        "directions": [ "From the 2nd storey of the SDE building, take the lift to the 4th storey.", 
+                    "Exit the lift, walk straight and turn right. Walk past the lecture theatres, past the toilet signs and through the passage.",
+                    "Turn left towards the male toilet and",
+                    "enter the staircase door. Climb the stairs to reach the musollah"],
+        "toiletLocation" : "",
+        "gender": "Male"
     }
+
+
+
+
+
+
 ]
