@@ -53,8 +53,14 @@ function SGmusollahLocator(chatId,location,bot){
     }
 
     response = "*"+ name + "*" +" at _" + address + "_ is your Nearest Musollah\n\n";
-    response += "*Directions*: " + directions + "\n\n";
-    response += "*Additional Details*: " + locationDetails;
+    if (directions != ""){
+        response += "*Directions*: " + directions + "\n\n";
+            if (locationDetails != ""){
+                response += "*Additional Details*: " + locationDetails;
+            }
+    }
+    
+    
 
 
 
