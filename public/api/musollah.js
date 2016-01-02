@@ -93,8 +93,9 @@ function musollahlocator(callback,musollahName,location){
 
     response = "_"+ name + "_" + " is your Nearest Musollah\n\n";
     response += "*Directions*: " + directions + "\n\n";
-    response += "*Toilet location*: " + toiletLocation ;
-
+    if (toiletLocation != ""){
+        response += "*Toilet location*: " + toiletLocation ;
+    }
     return callback(null,response);
 
 }
