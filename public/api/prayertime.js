@@ -9,7 +9,7 @@ function sendPrayerTime(chatId,bot) {
     message = "Prayer Times For" + '\n';
 
     var date = new Date();
-    if (date.getFullYear() == 2015) {
+    if (date.getFullYear() == 2016) {
 
         var targetDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
 
