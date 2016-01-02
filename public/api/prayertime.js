@@ -1,4 +1,4 @@
-var prayertimes = require('../prayertimes/2015.json');
+var prayertimes = require('../prayertimes/2016.json');
 
 
 
