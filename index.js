@@ -55,13 +55,12 @@ bot.on('message', function(msg) {
         }
         console.log(musollahSessions[chatId]);
         switch (body.toLowerCase()) {
-            default: 
-            var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
+            default: var musollahSession = musollahSessions[chatId] || new musollah.MusollahSession(chatId);
             var SGmusollahSession = SGmusollahSessions[chatId] || new sgmusollah.SGMusollahSession(chatId);
             if (musollahSession.onGoing) {
                 return musollah.musollahQuery(chatId, body.toLowerCase(), msg.location, bot);
             }
-            
+
             if (SGmusollahSession.onGoing) {
                 return sgmusollah.SGmusollahLocator(chatId, msg.location, bot);
             }
