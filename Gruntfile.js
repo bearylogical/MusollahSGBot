@@ -22,7 +22,7 @@ module.exports = function(grunt) {
             dev: {
                 script: 'index.js',
                 options: {
-                    nodeArgs: ['--debug']
+                    nodeArgs: ['--inspect']
                 }
             }
         }

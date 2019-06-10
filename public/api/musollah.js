@@ -4,6 +4,7 @@ var util = require('./util');
 
 var musollahSessions = {};
 
+
 function MusollahSession(chatId) {
     this.chatId = chatId;
     this.onGoing = false;
@@ -33,13 +34,13 @@ function musollahQuery(chatId, musollahName,location,bot) {
     locResponse += "followed by attaching your location (📌).";
 
     if (musollahName === "nearest musollah") {
-        return bot.sendMessage(chatId, locResponse, {
+        bot.sendMessage(chatId, locResponse, {
             reply_markup: JSON.stringify({
                 hide_keyboard: true
             })
         });
+        return musollahSessions[chatId].onGoing = false;
     }
-
     function callback(err, data) {
         if (err) {
             return bot.sendMessage(chatId, err, {
@@ -49,25 +50,25 @@ function musollahQuery(chatId, musollahName,location,bot) {
                 })
             });
         }
-        bot.sendMessage(chatId, data, {
-            parse_mode: "Markdown",
-            reply_markup: JSON.stringify({
-                hide_keyboard: true
-            })
-        });
-        musollahSessions[chatId] = new MusollahSession(chatId);
-        console.log(musollahSessions.onGoing);
-
+            bot.sendMessage(chatId, data, {
+                parse_mode: "Markdown",
+                reply_markup: JSON.stringify({
+                    hide_keyboard: true
+                })
+            });
+            
+           
+            
+            
     }
-    
-    musollahlocator(callback,musollahName,location)
-  
-
+    musollahSessions[chatId] = new MusollahSession(chatId);
+    musollahlocator(callback,musollahName,location);
+    console.log(musollahSessions[chatId]);
+    return musollahSessions[chatId];
 }
 
 function musollahlocator(callback,musollahName,location){
-
-    var directions;
+    
     var musollah;
 
     if(location) {

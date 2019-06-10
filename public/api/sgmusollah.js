@@ -1,6 +1,11 @@
 var geolib = require('geolib');
 var sgLoc = require('../locations/sgMusollah.json');
 var util = require('./util');
+var CREDENTIALS = require('../../private/telegram_credentials.json');
+var rest = require('restler')
+
+
+var musollahAPIKEY = CREDENTIALS.musollahAPI;
 
 var SGmusollahSessions = {};
 
@@ -32,7 +37,7 @@ function SGmusollahLocator(chatId,location,bot){
     var musollah;
 
     if(location) {
-        musollah = nearestSGMusollah(location);
+        musollah = SGMusollahQuery(location);
         
     }
 
@@ -62,8 +67,6 @@ function SGmusollahLocator(chatId,location,bot){
     
     
 
-
-
     bot.sendLocation(chatId,lat,longit).then(function() {
         bot.sendMessage(chatId,response,{
         parse_mode : "Markdown"
@@ -72,7 +75,36 @@ function SGmusollahLocator(chatId,location,bot){
 
     SGmusollahSessions[chatId] = new SGMusollahSession(chatId);
     
+    return SGmusollahSessions[chatId];
+}
 
+
+function SGMusollahQuery(start,callback){
+
+    function processMusollahInfo(data) {
+
+        var musollahList = '';
+        var header ;
+        data.forEach(function(musollah) {
+            musollahList += musollah.Place + '\n' 
+        });
+        console.log(musollahList);
+    }
+
+    var url = "https://api.musollah.com/info/musollah/nearest/sg,"
+    var reqUri = url + start.latitude + "," + start.longitude + "?X-API-KEY=" + musollahAPIKEY + "&page=1&perpage=3"  
+    
+    var reqOptions = {
+        'timeout': 5000
+    };
+
+    rest.get(reqUri, reqOptions).on('timeout', function() {
+        callback('Musollah Server down');
+    }).on('complete', function(data) {
+        processMusollahInfo(data,callback);
+    });
+
+    // 1.329258478122359,103.9435229038321?X-API-KEY=2GLqstVdfEp5k17R12C60I6B1y0TG167&page=1&perpage=16
 }
 
 
